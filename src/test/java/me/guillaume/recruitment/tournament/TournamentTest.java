@@ -1,10 +1,12 @@
 package me.guillaume.recruitment.tournament;
 
-
 import org.junit.jupiter.api.Test;
+import me.guillaume.recruitment.tournament.Character;
+import me.guillaume.recruitment.tournament.Fighter;
+import me.guillaume.recruitment.tournament.Swordsman;
+import me.guillaume.recruitment.tournament.Viking;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 
 /**
  *
@@ -17,8 +19,8 @@ public class TournamentTest {
 
 
     /**
-     * A Swordsman has 100 hit points and use a 1 hand sword that does 5 dmg
-     * A Viking has 120 hit points and use a 1 hand axe that does 6 dmg
+     * A me.guillaume.recruitment.tournament.Swordsman has 100 hit points and use a 1 hand sword that does 5 dmg
+     * A me.guillaume.recruitment.tournament.Viking has 120 hit points and use a 1 hand axe that does 6 dmg
      */
     @Test
     public void SwordsmanVsViking() {
@@ -76,7 +78,7 @@ public class TournamentTest {
     }
 
     /**
-     * a vicious Swordsman is a Swordsman that put poison on his weapon.
+     * a vicious me.guillaume.recruitment.tournament.Swordsman is a me.guillaume.recruitment.tournament.Swordsman that put poison on his weapon.
      * poison add 20 damages on two first blows
      * a veteran Highlander goes Berserk once his hit points are under 30% of his initial total
      * once Berserk, he doubles his damages
