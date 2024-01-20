@@ -1,10 +1,9 @@
 package me.guillaume.recruitment.tournament;
 
+import me.guillaume.recruitment.tournament.characters.Highlander;
+import me.guillaume.recruitment.tournament.characters.Swordsman;
+import me.guillaume.recruitment.tournament.characters.Viking;
 import org.junit.jupiter.api.Test;
-import me.guillaume.recruitment.tournament.Character;
-import me.guillaume.recruitment.tournament.Fighter;
-import me.guillaume.recruitment.tournament.Swordsman;
-import me.guillaume.recruitment.tournament.Viking;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,8 +18,8 @@ public class TournamentTest {
 
 
     /**
-     * A me.guillaume.recruitment.tournament.Swordsman has 100 hit points and use a 1 hand sword that does 5 dmg
-     * A me.guillaume.recruitment.tournament.Viking has 120 hit points and use a 1 hand axe that does 6 dmg
+     * A me.guillaume.recruitment.tournament.characters.Swordsman has 100 hit points and use a 1 hand sword that does 5 dmg
+     * A me.guillaume.recruitment.tournament.characters.Viking has 120 hit points and use a 1 hand axe that does 6 dmg
      */
     @Test
     public void SwordsmanVsViking() {
@@ -77,26 +76,131 @@ public class TournamentTest {
 
     }
 
-    /**
-     * a vicious me.guillaume.recruitment.tournament.Swordsman is a me.guillaume.recruitment.tournament.Swordsman that put poison on his weapon.
-     * poison add 20 damages on two first blows
-     * a veteran Highlander goes Berserk once his hit points are under 30% of his initial total
-     * once Berserk, he doubles his damages
-     */
-    @Test // Bonus points :D
-    public void ViciousSwordsmanVsVeteranHighlander() {
+    @Test
+    public void SwordsmanBlocksEffectivelyTheFirstBlowButNotTheSecond(){
+        Swordsman swordsman = new Swordsman()
+                .equip("buckler");
+        Viking viking = new Viking();
 
-        Swordsman swordsman = new Swordsman("Vicious")
-                .equip("axe")
-                .equip("buckler")
+        swordsman.takeDamage(viking.getWeapon().getDamage(), viking.getWeapon());
+        assertThat(swordsman.hitPoints()).isEqualTo(100);
+        // second blow
+        swordsman.takeDamage(viking.getWeapon().getDamage(), viking.getWeapon());
+        assertThat(swordsman.hitPoints()).isEqualTo(94);
+
+    }
+
+    @Test
+    public void BucklerBreaksAfterSixBlowsFromAxeWieldingFighter(){
+        Swordsman swordsman = new Swordsman()
+                .equip("buckler");
+        Viking viking = new Viking();
+
+        swordsman.takeDamage(viking.getWeapon().getDamage(), viking.getWeapon());
+        swordsman.takeDamage(viking.getWeapon().getDamage(), viking.getWeapon());
+        swordsman.takeDamage(viking.getWeapon().getDamage(), viking.getWeapon());
+        swordsman.takeDamage(viking.getWeapon().getDamage(), viking.getWeapon());
+        swordsman.takeDamage(viking.getWeapon().getDamage(), viking.getWeapon());
+        swordsman.takeDamage(viking.getWeapon().getDamage(), viking.getWeapon());
+
+        assertThat(swordsman.hitPoints()).isEqualTo(82);
+        assertThat(swordsman.getBuckler().getState().isBroken()).isEqualTo(true);
+    }
+    @Test
+    public void BucklerDoesNotBreakAfterSixBlowsFromNonAxeWieldingFighter(){
+        Swordsman swordsman = new Swordsman()
+                .equip("buckler");
+        Swordsman swordsman2 = new Swordsman();
+
+        swordsman.takeDamage(swordsman2.getWeapon().getDamage(), swordsman2.getWeapon());
+        swordsman.takeDamage(swordsman2.getWeapon().getDamage(), swordsman2.getWeapon());
+        swordsman.takeDamage(swordsman2.getWeapon().getDamage(), swordsman2.getWeapon());
+        swordsman.takeDamage(swordsman2.getWeapon().getDamage(), swordsman2.getWeapon());
+        swordsman.takeDamage(swordsman2.getWeapon().getDamage(), swordsman2.getWeapon());
+        swordsman.takeDamage(swordsman2.getWeapon().getDamage(), swordsman2.getWeapon());
+        swordsman.takeDamage(swordsman2.getWeapon().getDamage(), swordsman2.getWeapon());
+        swordsman.takeDamage(swordsman2.getWeapon().getDamage(), swordsman2.getWeapon());
+        assertThat(swordsman.hitPoints()).isEqualTo(80);
+        assertThat(swordsman.getBuckler().getState().isBroken()).isEqualTo(false);
+    }
+
+    @Test
+    public void BucklerRemainsBrokenNextTurnAfterBeingBroke(){
+        Swordsman swordsman = new Swordsman()
+                .equip("buckler");
+        Viking viking = new Viking();
+
+        swordsman.takeDamage(viking.getWeapon().getDamage(), viking.getWeapon());
+        swordsman.takeDamage(viking.getWeapon().getDamage(), viking.getWeapon());
+        swordsman.takeDamage(viking.getWeapon().getDamage(), viking.getWeapon());
+        swordsman.takeDamage(viking.getWeapon().getDamage(), viking.getWeapon());
+        swordsman.takeDamage(viking.getWeapon().getDamage(), viking.getWeapon());
+        swordsman.takeDamage(viking.getWeapon().getDamage(), viking.getWeapon());
+
+        assertThat(swordsman.hitPoints()).isEqualTo(82);
+        assertThat(swordsman.getBuckler().getState().isBroken()).isEqualTo(true);
+        swordsman.takeDamage(viking.getWeapon().getDamage(), viking.getWeapon());
+        assertThat(swordsman.getBuckler().getState().isBroken()).isEqualTo(true);
+    }
+
+
+    @Test
+    public void HighlanderAttacksTwoTurnsOutOfThree(){
+        Highlander highlander = new Highlander();
+
+        Swordsman swordsman = new Swordsman();
+
+        swordsman.takeDamage(highlander.getWeapon().getDamage(), highlander.getWeapon());
+        swordsman.takeDamage(highlander.getWeapon().getDamage(), highlander.getWeapon());
+        swordsman.takeDamage(highlander.getWeapon().getDamage(), highlander.getWeapon());
+        assertThat(swordsman.hitPoints()).isEqualTo(76);
+
+
+
+    }
+
+    @Test
+    public void armorReducesDamageReceivedByThree(){
+        Highlander highlander = new Highlander().equip("armor");
+
+        Swordsman swordsman = new Swordsman()
                 .equip("armor");
 
-        Highlander highlander = new Highlander("Veteran");
+        swordsman.takeDamage(highlander.getWeapon().getDamage(), highlander.getWeapon());
+        assertThat(swordsman.hitPoints()).isEqualTo(91);
 
-        swordsman.engage(highlander);
 
-        assertThat(swordsman.hitPoints()).isEqualTo(1);
-        assertThat(highlander.hitPoints()).isEqualTo(0);
+
+    }
+
+    @Test
+    public void armorReducesDamageDealtByOne(){
+        Highlander highlander = new Highlander().equip("armor");
+
+        Swordsman swordsman = new Swordsman();
+
+        swordsman.takeDamage(highlander.getDamageEveryBlow(), highlander.getWeapon());
+        assertThat(swordsman.hitPoints()).isEqualTo(89);
+
+
+
+    }
+
+    @Test
+    public void BucklerOdesNotBlockWhenGreatswordDoesNotAttack() {
+
+        Highlander highlander = new Highlander();
+
+        Swordsman swordsman = new Swordsman()
+                .equip("buckler");
+
+        assertThat(swordsman.getBuckler().getState().isEffective()).isEqualTo(true);
+        swordsman.takeDamage(highlander.getDamageEveryBlow(), highlander.getWeapon());
+        assertThat(swordsman.getBuckler().getState().isIneffective()).isEqualTo(true);
+        swordsman.takeDamage(highlander.getDamageEveryBlow(), highlander.getWeapon());
+        assertThat(swordsman.getBuckler().getState().isEffective()).isEqualTo(true);
+        swordsman.takeDamage(highlander.getDamageEveryBlow(), highlander.getWeapon());
+        assertThat(swordsman.getBuckler().getState().isEffective()).isEqualTo(true);
 
     }
 
