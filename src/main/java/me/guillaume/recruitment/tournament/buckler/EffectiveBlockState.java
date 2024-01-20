@@ -6,7 +6,7 @@ import me.guillaume.recruitment.tournament.weapons.Axe;
 import me.guillaume.recruitment.tournament.weapons.Weapon;
 
 public class EffectiveBlockState implements BucklerState {
-    private Buckler buckler;
+    private final Buckler buckler;
 
     public EffectiveBlockState(Buckler buckler) {
         this.buckler = buckler;
@@ -16,19 +16,11 @@ public class EffectiveBlockState implements BucklerState {
         if (weapon instanceof Axe) {
             buckler.reduceBreakResistance();
         }
-
-
     }
     public BucklerState nextState() {
         return new IneffectiveBlockState(buckler);
 
     }
-
-    @Override
-    public String getName() {
-        return "EffectivelyBlocking";
-    }
-
     @Override
     public boolean isBroken(){
         return false;

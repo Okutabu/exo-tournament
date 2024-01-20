@@ -75,6 +75,28 @@ public class TournamentTest {
         assertThat(highlander.hitPoints()).isEqualTo(10);
 
     }
+    /**
+     * a vicious Swordsman is a Swordsman that put poison on his weapon.
+     * poison add 20 damages on two first blows
+     * a veteran Highlander goes Berserk once his hit points are under 30% of his initial total
+     * once Berserk, he doubles his damages
+     */
+    @Test // Bonus points :D
+    public void ViciousSwordsmanVsVeteranHighlander() {
+
+        Swordsman swordsman = new Swordsman("Vicious")
+                .equip("axe")
+                .equip("buckler")
+                .equip("armor");
+
+        Highlander highlander = new Highlander("Veteran");
+
+        swordsman.engage(highlander);
+
+        assertThat(swordsman.hitPoints()).isEqualTo(1);
+        assertThat(highlander.hitPoints()).isEqualTo(0);
+
+    }
 
     @Test
     public void SwordsmanBlocksEffectivelyTheFirstBlowButNotTheSecond(){
@@ -203,5 +225,25 @@ public class TournamentTest {
         assertThat(swordsman.getBuckler().getState().isEffective()).isEqualTo(true);
 
     }
+    @Test
+    public void ViciousSwordsmanDealsBonusDamageTwice() {
+
+        Swordsman swordsman = new Swordsman("Vicious")
+                .equip("axe")
+                .equip("buckler")
+                .equip("armor");
+
+        Highlander highlander = new Highlander();
+        // axe base damage is 6 + 20 from poison and -1 from armor should be 25 first two hits
+        highlander.takeDamage(swordsman.getDamageEveryBlow(), swordsman.getWeapon());
+        assertThat(highlander.hitPoints()).isEqualTo(125);
+        highlander.takeDamage(swordsman.getDamageEveryBlow(), swordsman.getWeapon());
+        assertThat(highlander.hitPoints()).isEqualTo(100);
+        //third attack deals 5
+        highlander.takeDamage(swordsman.getDamageEveryBlow(), swordsman.getWeapon());
+        assertThat(highlander.hitPoints()).isEqualTo(95);
+
+    }
+
 
 }

@@ -7,8 +7,6 @@ public interface BucklerState {
     void block(Character protectedCharacter, Weapon weapon);
     BucklerState nextState();
 
-    String getName();
-
     boolean isBroken();
     boolean isIneffective();
     boolean isEffective();

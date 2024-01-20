@@ -7,12 +7,7 @@ public class Viking extends Character{
     public Viking(){
         hitPoints = 120;
         weapon = new Axe();
-        baseDamageEveryBlow = weapon.getDamage();
         immunityToDamage = false;
-    }
-    @Override
-    public int hitPoints() {
-        return hitPoints;
     }
 
     @Override

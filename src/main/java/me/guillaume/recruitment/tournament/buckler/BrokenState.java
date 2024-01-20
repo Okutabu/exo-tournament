@@ -12,10 +12,6 @@ public class BrokenState implements BucklerState {
     }
 
     @Override
-    public String getName() {
-        return "Broken";
-    }
-    @Override
     public boolean isBroken(){
         return true;
     }

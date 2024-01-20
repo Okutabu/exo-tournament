@@ -4,7 +4,7 @@ import me.guillaume.recruitment.tournament.characters.Character;
 import me.guillaume.recruitment.tournament.weapons.Weapon;
 
 public class IneffectiveBlockState implements BucklerState {
-    private Buckler buckler;
+    private final Buckler buckler;
     public IneffectiveBlockState(Buckler buckler) {
         this.buckler = buckler;
     }
@@ -20,12 +20,6 @@ public class IneffectiveBlockState implements BucklerState {
         }
 
     }
-
-    @Override
-    public String getName() {
-        return "InnefectiveBlocking";
-    }
-
     @Override
     public boolean isBroken(){
         return false;

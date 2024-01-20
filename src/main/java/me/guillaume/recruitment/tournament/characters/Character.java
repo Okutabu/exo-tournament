@@ -2,17 +2,17 @@ package me.guillaume.recruitment.tournament.characters;
 
 import me.guillaume.recruitment.tournament.Armor;
 import me.guillaume.recruitment.tournament.buckler.Buckler;
+import me.guillaume.recruitment.tournament.weapons.Axe;
 import me.guillaume.recruitment.tournament.weapons.Greatsword;
 import me.guillaume.recruitment.tournament.weapons.Weapon;
 
 public abstract class Character {
-    //hit points are the number of damage they can take ebfore dying
+    //hit points are the number of damage they can take before dying
     protected int hitPoints;
     protected Weapon weapon;
 
     protected Buckler buckler;
     protected Armor armor;
-    protected int baseDamageEveryBlow;
     protected boolean immunityToDamage;
 
         //from Fighter interface
@@ -28,11 +28,19 @@ public abstract class Character {
     }
 
     public Character equip(String equipment) {
-        if (equipment == "buckler") {
-            buckler = new Buckler();
-        }
-        else if(equipment == "armor"){
-            armor = new Armor();
+        switch (equipment) {
+            case "buckler":
+                buckler = new Buckler();
+                break;
+            case "armor":
+                armor = new Armor();
+                break;
+            case "axe":
+                weapon = new Axe();
+                break;
+            default:
+                System.out.println("Unknown equipment: " + equipment);
+                break;
         }
         return this;
     }
@@ -67,15 +75,15 @@ public abstract class Character {
         return weapon;
     }
 
-    public Armor getArmor(){
-        return armor;
-    }
-
     public int getDamageEveryBlow() {
         if (armor!=null){
-            return Armor.debuffDamage(baseDamageEveryBlow);
+            return Armor.debuffDamage(getBaseDamage());
         }
-        return baseDamageEveryBlow;
+        return getBaseDamage();
+    }
+
+    public int getBaseDamage() {
+        return weapon.getDamage();
     }
 
     public void setImmunityToDamage(boolean bool){
